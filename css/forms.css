@@ -1,0 +1,116 @@
+.form-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e8f0fa 0%, #f5faff 100%);
+  display: flex; flex-direction: column;
+}
+.form-topbar {
+  background: #0a2a5c; color: #fff;
+  padding: 12px 24px;
+  display: flex; align-items: center; gap: 14px;
+  font-size: 14px; font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.form-topbar a { color: #fff; opacity: 0.85; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+.form-topbar a:hover { opacity: 1; }
+
+.form-container {
+  flex: 1;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 30px 20px;
+}
+.form-box {
+  width: 100%; max-width: 640px;
+  background: #fff; border-radius: 10px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.form-box-header {
+  padding: 16px 24px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ecf0f1;
+  font-size: 15px; font-weight: 700;
+  color: var(--text-dark);
+}
+.form-box-body { padding: 22px 24px; }
+
+.form-subsection-title {
+  background: #c9e4fa;
+  color: #0a2a5c;
+  padding: 8px 14px;
+  font-size: 12px; font-weight: 700;
+  border-radius: 6px;
+  margin: 18px 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.form-subsection-title:first-child { margin-top: 0; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.form-row label {
+  font-size: 12px; font-weight: 500;
+  color: var(--text-dark);
+}
+.form-row .form-control { margin: 0; }
+
+.radio-group {
+  display: flex; gap: 18px; font-size: 12px;
+}
+.radio-group label {
+  display: flex; align-items: center; gap: 6px;
+  cursor: pointer; font-weight: 500;
+}
+
+.form-actions {
+  display: flex; justify-content: flex-end;
+  gap: 12px; margin-top: 20px;
+  padding-top: 16px; border-top: 1px solid #ecf0f1;
+}
+
+.form-note {
+  font-size: 11px; color: var(--text-mid);
+  margin-top: 14px; font-style: italic;
+}
+
+/* Table untuk halaman verifikasi */
+.verify-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 12px;
+}
+.verify-table th, .verify-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+.verify-table th {
+  background: #0a2a5c; color: #fff;
+  font-weight: 600; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.verify-table tr:hover td { background: #f8f9fa; }
+.verify-table .status-badge {
+  display: inline-block; padding: 3px 8px;
+  border-radius: 12px; font-size: 10px; font-weight: 600;
+}
+.status-menunggu { background: #fff3cd; color: #856404; }
+.status-disetujui { background: #d4edda; color: #155724; }
+.status-ditolak { background: #f8d7da; color: #721c24; }
+
+.btn-approve, .btn-reject {
+  padding: 5px 10px; font-size: 11px;
+  border: none; border-radius: 4px;
+  color: #fff; cursor: pointer; font-weight: 600;
+  margin-right: 4px;
+}
+.btn-approve { background: var(--success); }
+.btn-reject { background: var(--danger); }
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; gap: 4px; }
+  .form-row label { font-weight: 600; }
+}
