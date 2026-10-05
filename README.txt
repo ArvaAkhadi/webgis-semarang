@@ -2,14 +2,11 @@
 
 ## Menjalankan aplikasi
 
-Chatbot memerlukan backend Node.js dan koneksi internet ke Groq, jadi halaman tidak dapat dibuka dengan klik dua kali (`file://`). Gunakan Node.js 20.6 atau lebih baru.
+Chatbot memakai Supabase Edge Function dan koneksi internet, jadi halaman tidak dapat dibuka dengan klik dua kali (`file://`).
 
-1. Salin `.env.example` menjadi `.env`.
-2. Isi `GROQ_API_KEY` di `.env` dengan key Groq yang masih aktif. Jangan masukkan file `.env` ke Git.
-3. Jalankan `npm.cmd start` dari folder proyek PowerShell.
-4. Buka `http://localhost:3000/map.html`.
+Untuk melihat aplikasi secara lokal, gunakan Node.js 20.6 atau lebih baru dan jalankan `npm.cmd start` dari folder proyek. Buka `http://localhost:3000/map.html`; tambahkan `http://localhost:3000` ke secret `ALLOWED_ORIGINS` Supabase jika ingin menguji chatbot dari lokal.
 
-Tidak perlu memasang atau mengunduh model lokal. Jangan masukkan API key asli ke `.env.example` atau ke Git.
+Jangan masukkan API key Groq ke `.env`, `.env.example`, atau Git. Simpan key sebagai secret di proyek Supabase. Tidak perlu memasang atau mengunduh model lokal.
 Skrip lokal `upload_cases_to_supabase.py` sengaja tidak disertakan karena memuat service-role key; pindahkan key ke environment variable sebelum membagikan skrip tersebut.
 
 ## Konteks chatbot
@@ -18,4 +15,15 @@ Chatbot menggunakan filter penyakit/tahun aktif, ringkasan kasus per kecamatan, 
 
 ## Deploy
 
-Deploy aplikasi pada hosting yang mendukung Node.js. Atur `GROQ_API_KEY`, `GROQ_MODEL` (opsional), dan `PORT` sebagai environment variables di hosting, lalu jalankan `node server.js`. Jangan deploy `.env` atau membagikan API key di sisi browser.
+### Chatbot dengan Supabase Edge Functions
+
+1. Cabut API key Groq yang pernah terekspos dan buat key baru.
+2. Pastikan CLI sudah di-link ke project ref `qcjdstuwlaykxfbltzmp`. Jika belum, jalankan `npx.cmd supabase login`, lalu `npx.cmd supabase link --project-ref qcjdstuwlaykxfbltzmp` dari folder proyek.
+3. Di Dashboard Supabase, buka **Edge Functions → Secrets** dan tambahkan `GROQ_API_KEY` dengan key baru serta `ALLOWED_ORIGINS` dengan nilai `https://arvaakhadi.github.io`. Untuk uji lokal, tambahkan origin lokal dengan koma, misalnya `https://arvaakhadi.github.io,http://localhost:3000`.
+4. Deploy function: `npx.cmd supabase functions deploy ai-chat --no-verify-jwt`.
+5. Di GitHub repo, buka **Settings → Pages**, pilih **GitHub Actions** pada Source.
+6. Push ke branch `main` untuk menjalankan workflow Pages. Situs tersedia di `https://arvaakhadi.github.io/webgis-semarang/map.html`.
+
+`GROQ_API_KEY` harus disimpan sebagai secret Supabase Edge Function, bukan GitHub Actions secret. Function chatbot tidak memakai verifikasi JWT bawaan karena aplikasi menggunakan public publishable key. CORS membatasi browser ke origin yang dikonfigurasi, tetapi CORS bukan pengganti autentikasi dan tidak menghentikan pemanggilan langsung di luar browser. Pantau batas penggunaan Groq dan Supabase. Jangan deploy `.env` atau membagikan API key di sisi browser.
+
+`server.js` masih menyediakan endpoint Node.js lama `/api/chat`, tetapi halaman chatbot kini memanggil Edge Function Supabase.

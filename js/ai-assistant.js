@@ -2,8 +2,6 @@
    AI ASSISTANT
    ========================================================= */
 
-const AI_ENDPOINT = 'api/chat';
-
 const AIAssistant = {
   messages: [],
   dataContext: null,
@@ -46,22 +44,14 @@ const AIAssistant = {
         ...this.messages.slice(-10),
         { role: 'user', content: question }
       ];
-      const res = await fetch(AI_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const { data, error } = await window.supabaseClient.functions.invoke('ai-chat', {
+        body: {
           messages,
           context: this.dataContext
-        })
+        }
       });
-
-      if (!res.ok) {
-        const result = await res.json().catch(() => ({}));
-        throw new Error(result.error || `Layanan AI gagal (HTTP ${res.status}).`);
-      }
-
-      const result = await res.json();
-      const answer = result.answer;
+      if (error) throw new Error(error.message || 'Layanan AI gagal.');
+      const answer = data && data.answer;
       if (typeof answer !== 'string' || !answer.trim()) {
         throw new Error('Layanan AI mengirim jawaban kosong.');
       }
@@ -71,7 +61,7 @@ const AIAssistant = {
     } catch (e) {
       console.error(e);
       const message = e instanceof TypeError
-        ? 'server chatbot tidak terhubung. Jalankan npm start dan buka http://localhost:3000/map.html.'
+        ? 'layanan chatbot tidak terhubung. Periksa koneksi dan konfigurasi Supabase Edge Function.'
         : e.message;
       this.replaceLastLoading('Maaf, ' + message);
     } finally {
