@@ -50,7 +50,14 @@ const AIAssistant = {
           context: this.dataContext
         }
       });
-      if (error) throw new Error(error.message || 'Layanan AI gagal.');
+      if (error) {
+        let message = error.message || 'Layanan AI gagal.';
+        if (error.context && typeof error.context.clone === 'function') {
+          const details = await error.context.clone().json().catch(() => null);
+          if (details && typeof details.error === 'string') message = details.error;
+        }
+        throw new Error(message);
+      }
       const answer = data && data.answer;
       if (typeof answer !== 'string' || !answer.trim()) {
         throw new Error('Layanan AI mengirim jawaban kosong.');
