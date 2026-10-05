@@ -35,6 +35,18 @@ html, body, #map {
   color: #0a2a5c;
   line-height: 1.35;
 }
+.map-home-link {
+  display: grid; place-items: center;
+  width: 32px; height: 32px; flex: 0 0 32px;
+  margin-left: auto;
+  color: #0a2a5c; background: #fff;
+  border: 1px solid #c9d9e8; border-radius: 6px;
+  text-decoration: none;
+}
+.map-home-link:hover { background: #f1f7fc; }
+.map-home-link:focus-visible {
+  outline: 2px solid #3498db; outline-offset: 2px;
+}
 
 .panel-section {
   background: #f8f9fa;
