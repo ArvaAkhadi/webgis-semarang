@@ -39,7 +39,7 @@
 .hero-content {
   position: relative; z-index: 2;
   width: min(100%, 1040px); text-align: left;
-  padding: 150px clamp(24px, 9vw, 120px) 118px;
+  padding: 132px clamp(24px, 7vw, 86px) 96px;
   animation: hero-enter 650ms ease-out both;
 }
 .hero-content::before {
@@ -48,16 +48,16 @@
   letter-spacing: 0.2em;
 }
 .hero-title {
-  max-width: 840px; margin: 0 0 20px;
-  color: #eff7f5; font: 600 64px/0.98 var(--font-display);
+  max-width: 960px; margin: 0 0 18px;
+  color: #eff7f5; font: 600 52px/1 var(--font-display);
   letter-spacing: 0.01em; text-wrap: balance;
 }
 .hero-title::after {
   content: ''; display: block; width: 74px; height: 3px;
-  margin-top: 22px; background: var(--primary);
+  margin-top: 18px; background: var(--primary);
 }
 .hero-subtitle {
-  max-width: 620px; margin: 0 0 32px;
+  max-width: 620px; margin: 0 0 24px;
   color: #a8bec0; font-size: 15px; line-height: 1.75;
 }
 .disease-icons {
@@ -65,7 +65,7 @@
   flex-wrap: wrap; margin: 0 0 34px;
   border-top: 1px solid rgba(156,220,223,0.18);
   border-bottom: 1px solid rgba(156,220,223,0.18);
-  width: fit-content;
+  width: fit-content; margin-bottom: 26px;
 }
 .disease-item {
   display: flex; align-items: center; gap: 9px;
@@ -102,11 +102,13 @@
   .logo-text { font-size: 18px; }
   .hero { min-height: 100svh; }
   .hero::after { top: 90px; right: 20px; font-size: 9px; }
-  .hero-content { padding: 142px 22px 116px; }
-  .hero-title { font-size: 45px; line-height: 0.98; }
-  .hero-subtitle { max-width: 480px; font-size: 13px; }
+  .hero-content { padding: 118px 22px 94px; }
+  .hero-title { font-size: 38px; line-height: 1.02; }
+  .hero-title::after { margin-top: 14px; }
+  .hero-subtitle { max-width: 480px; margin-bottom: 18px; font-size: 13px; }
   .disease-icons { width: 100%; }
-  .disease-item { padding: 11px 10px 11px 0; margin-right: 10px; font-size: 10px; }
+  .disease-icons { margin-bottom: 20px; }
+  .disease-item { padding: 10px 10px 10px 0; margin-right: 10px; font-size: 10px; }
   .disease-item + .disease-item { padding-left: 10px; }
   .landing-footer { padding: 12px 20px; }
 }
