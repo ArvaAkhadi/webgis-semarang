@@ -70,6 +70,11 @@
         <option>2022</option><option>2023</option><option>2024</option>
         <option selected>2025</option><option>2026</option>
       </select>
+      <label class="form-label" for="select-map-mode">Tampilan Peta</label>
+      <select id="select-map-mode">
+        <option value="jumlah" selected>Jumlah Kasus</option>
+        <option value="density">Kepadatan Kasus (kasus/km²)</option>
+      </select>
     </div>
 
     <div class="panel-section">
@@ -106,7 +111,7 @@
       <div class="section-header">
         <i class="fas fa-list-ul"></i> Legenda
       </div>
-      <div class="legend-subtitle">Jumlah Kasus per Kecamatan</div>
+      <div class="legend-subtitle" id="disease-legend-title">Jumlah Kasus per Kecamatan</div>
       <div id="legend-disease-items"></div>
     </div>
 
@@ -362,7 +367,7 @@ setTimeout(function() {
      ========================================================= */
   window.state = {
     penyakit: 'dbd', tahun: '2025',
-    mapData: {}, barData: {},
+    mapData: {}, barData: {}, areaKm2: {}, mapMode: 'jumlah',
     geojsonLayer: null, outlineLayer: null, chartInstance: null
   };
   window.LABEL_PENYAKIT = {
@@ -430,6 +435,10 @@ setTimeout(function() {
         }
       }).addTo(map);
 
+      kecFeatures.forEach(function(feature) {
+        state.areaKm2[feature.properties.KECAMATAN] = turf.area(feature) / 1000000;
+      });
+
       if (typeof rebuildAIAccessContext === 'function') {
         rebuildAIAccessContext();
       }
@@ -446,8 +455,8 @@ setTimeout(function() {
    ========================================================= */
 function styleFeature(feature) {
   var kec = feature.properties.KECAMATAN;
-  var value = state.mapData[kec] || 0;
-  var maxVal = Math.max.apply(null, Object.values(state.mapData).concat([1]));
+  var value = getMapValue(kec);
+  var maxVal = getMapMax();
   return {
     pane: 'pane_puskesmas',
     color: 'transparent', weight: 0,
@@ -456,12 +465,26 @@ function styleFeature(feature) {
   };
 }
 
+function getMapValue(kecamatan) {
+  var cases = Number(state.mapData[kecamatan]) || 0;
+  if (state.mapMode !== 'density') return cases;
+  var areaKm2 = Number(state.areaKm2[kecamatan]) || 0;
+  return areaKm2 > 0 ? cases / areaKm2 : 0;
+}
+
+function getMapMax() {
+  var values = Object.keys(state.mapData).map(getMapValue);
+  return Math.max.apply(null, values.concat([0]));
+}
+
 function onEachFeature(feature, layer) {
   var kec = feature.properties.KECAMATAN;
   var pkmList = feature.properties.PUSKESMAS_LIST || [];
 
   layer.on('click', function() {
     var total = state.mapData[kec] || 0;
+    var areaKm2 = Number(state.areaKm2[kec]) || 0;
+    var density = areaKm2 > 0 ? total / areaKm2 : 0;
     var detail = state.barData[kec] || {
       laki_laki: '-', perempuan: '-',
       meninggal_laki_laki: '-', meninggal_perempuan: '-'
@@ -476,7 +499,9 @@ function onEachFeature(feature, layer) {
                '<tr><td>Laki-laki</td><td>' + detail.laki_laki + '</td></tr>' +
                '<tr><td>Perempuan</td><td>' + detail.perempuan + '</td></tr>' +
                '<tr><td class="total-row"><b>Total Kasus</b></td>' +
-               '<td class="total-row"><b>' + total + '</b></td></tr>';
+               '<td class="total-row"><b>' + total + '</b></td></tr>' +
+               '<tr><td>Luas Wilayah</td><td>' + areaKm2.toFixed(2) + ' km²</td></tr>' +
+               '<tr><td>Kepadatan Kasus</td><td>' + density.toFixed(2) + ' kasus/km²</td></tr>';
     if (state.penyakit !== 'tb_baru') {
       html += '<tr><td>Meninggal (L)</td><td>' + detail.meninggal_laki_laki + '</td></tr>' +
               '<tr><td>Meninggal (P)</td><td>' + detail.meninggal_perempuan + '</td></tr>';
@@ -506,22 +531,32 @@ function getColor(value, maxVal) {
          ratio > 0.20 ? '#fdcb6e' :
          ratio > 0.00 ? '#ffeaa7' : '#ffffff';
 }
-function getLegendGrades(maxVal) {
+function getLegendGrades(maxVal, isDensity) {
   var grades = [0];
-  if (maxVal <= 0) return [0, 1];
-  for (var i = 1; i <= 5; i++) grades.push(Math.round(maxVal * i / 5));
+  if (maxVal <= 0) return [0, isDensity ? 0.01 : 1];
+  for (var i = 1; i <= 5; i++) {
+    var grade = maxVal * i / 5;
+    grades.push(isDensity ? Number(grade.toFixed(2)) : Math.round(grade));
+  }
   return grades;
 }
-function updateDiseaseLegend(maxVal, penyakit, tahun) {
+function updateDiseaseLegend(maxVal, penyakit, tahun, mapMode) {
   var container = document.getElementById('legend-disease-items');
-  var grades = getLegendGrades(maxVal);
+  var isDensity = mapMode === 'density';
+  var grades = getLegendGrades(maxVal, isDensity);
+  document.getElementById('disease-legend-title').textContent = isDensity
+    ? 'Kepadatan Kasus per Kecamatan'
+    : 'Jumlah Kasus per Kecamatan';
   var html = '<div style="font-size:10px;color:#95a5a6;margin-bottom:6px;">' +
              LABEL_PENYAKIT[penyakit] + ' - ' + tahun + '</div>';
   for (var i = 0; i < grades.length - 1; i++) {
     html += '<div class="legend-row">' +
             '<span class="swatch" style="background:' +
-            getColor(grades[i] + 1, maxVal) + '"></span>' +
-            '<span>' + grades[i] + ' - ' + grades[i + 1] + '</span>' +
+            getColor((grades[i] + grades[i + 1]) / 2, maxVal) + '"></span>' +
+            '<span>' +
+            (isDensity ? grades[i].toFixed(2) : grades[i]) + ' - ' +
+            (isDensity ? grades[i + 1].toFixed(2) : grades[i + 1]) +
+            (isDensity ? ' kasus/km²' : '') + '</span>' +
             '</div>';
   }
   container.innerHTML = html;
@@ -591,8 +626,8 @@ async function loadAllData() {
 
     if (state.geojsonLayer) state.geojsonLayer.setStyle(styleFeature);
 
-    var maxVal = Math.max.apply(null, Object.values(state.mapData).concat([1]));
-    updateDiseaseLegend(maxVal, state.penyakit, state.tahun);
+    var maxVal = getMapMax();
+    updateDiseaseLegend(maxVal, state.penyakit, state.tahun, state.mapMode);
     updateMonthlyChart(lineJson, state.penyakit, state.tahun);
     window.AI_CASES_SOURCE = !error && dbCases && dbCases.length
       ? 'Supabase' : 'JSON lokal';
@@ -673,6 +708,11 @@ document.getElementById('select-penyakit').addEventListener('change', function()
 document.getElementById('select-tahun').addEventListener('change', function() {
   state.tahun = this.value;
   loadAllData();
+});
+document.getElementById('select-map-mode').addEventListener('change', function() {
+  state.mapMode = this.value;
+  if (state.geojsonLayer) state.geojsonLayer.setStyle(styleFeature);
+  updateDiseaseLegend(getMapMax(), state.penyakit, state.tahun, state.mapMode);
 });
 
 /* =========================================================
