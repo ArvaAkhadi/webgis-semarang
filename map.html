@@ -890,7 +890,11 @@ window.rebuildAIAccessContext = function() {
     Object.keys(bufferLayers).forEach(function(zona) {
       var bufLayer = bufferLayers[zona];
       if (!bufLayer || kecFeatures.length === 0) return;
-      var bufGeom = bufLayer.toGeoJSON();
+      var bufGeoJSON = bufLayer.toGeoJSON();
+      var bufGeom = bufGeoJSON.type === 'FeatureCollection'
+        ? bufGeoJSON.features[0]
+        : bufGeoJSON;
+      if (!bufGeom || !bufGeom.geometry) return;
 
       kecFeatures.forEach(function(kec) {
         try {
