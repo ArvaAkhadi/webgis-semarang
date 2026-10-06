@@ -254,3 +254,85 @@ html, body, #map {
   #left-panel { width: 260px; top: 8px; left: 8px; bottom: 8px; }
   #ai-assistant { width: 280px; bottom: 12px; right: 12px; }
 }
+
+@media (max-width: 600px) {
+  #left-panel {
+    width: calc(100vw - 16px); height: 58vh;
+    top: 8px; left: 8px; bottom: auto;
+  }
+  .leaflet-top.leaflet-left {
+    top: calc(58vh + 18px); left: 8px;
+  }
+  #ai-assistant {
+    width: calc(100vw - 24px); left: 12px; right: 12px;
+    bottom: 12px;
+  }
+}
+
+/* Semarang Signal visual system */
+#left-panel {
+  color: #e5f0f1; background: rgba(8,21,27,0.94);
+  border: 1px solid #28434c; border-radius: 7px;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.38);
+  backdrop-filter: blur(16px);
+}
+#left-panel-body::-webkit-scrollbar-thumb { background: #31505a; }
+.panel-header-section {
+  background: #112832; border: 1px solid #294750; border-radius: 5px;
+}
+.panel-header-section .panel-title { color: #e0eeed; font-family: var(--font-display); font-size: 13px; }
+.map-home-link { color: var(--primary); background: #0b1b22; border-color: #36545c; }
+.map-home-link:hover { color: #071b20; background: var(--primary); }
+.panel-section { background: rgba(16,35,44,0.82); border: 1px solid #213b45; border-radius: 5px; }
+.section-header { color: #9db4b8; font-family: var(--font-display); letter-spacing: 0.1em; }
+.section-header i { color: var(--primary); }
+.panel-section label.form-label { color: #89a3a8; letter-spacing: 0.09em; }
+.panel-section select {
+  color: #e0ecec; background: #091920; border-color: #2b4851;
+}
+.panel-section select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(75,215,203,0.14); }
+.layer-item { color: #c4d5d6; }
+.layer-item:hover { color: var(--primary); }
+.layer-item input[type="checkbox"] { border-color: #587078; border-radius: 3px; }
+.layer-item input[type="checkbox"]:checked { background: var(--primary); border-color: var(--primary); }
+.layer-item input[type="checkbox"]:checked::after { border-color: #082026; }
+.legend-subtitle { color: #8ca6ab; }
+.legend-row { color: #c2d2d4; }
+.legend-row .swatch { border-color: rgba(190,225,225,0.3); }
+.admin-btn { color: #092126; background: var(--primary); border-radius: 4px; }
+.admin-btn:hover { background: #8ce9df; }
+
+#ai-assistant {
+  color: #e3eeee; background: rgba(8,21,27,0.97);
+  border: 1px solid #31535b; border-radius: 7px;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.38);
+  backdrop-filter: blur(18px);
+}
+#ai-header { border-bottom-color: #27434c; }
+#ai-header img { width: 24px; height: 24px; }
+.ai-title { color: #eaf5f3; font: 600 16px var(--font-display); letter-spacing: 0.04em; }
+.ai-subtitle { color: #8ca6ab; opacity: 1; }
+.ai-collapse-icon { color: var(--primary); }
+.ai-body { background: rgba(9,25,32,0.78); }
+#ai-messages { color: #cfdddd; }
+.ai-msg { border-radius: 5px; }
+.ai-msg-user { color: #d9fffb; background: rgba(75,215,203,0.13); }
+.ai-msg-ai { background: #142c36; border: 1px solid #243f49; }
+#ai-input-row { background: #091920; border: 1px solid #2a4650; border-radius: 5px; }
+#ai-input { color: #e5f0f1; }
+#ai-input::placeholder { color: #708a90; }
+#ai-send { color: #082126; background: var(--primary); border-radius: 4px; }
+#ai-send:hover { background: #8ce9df; }
+
+.leaflet-control-zoom { border: 1px solid #31515a !important; box-shadow: 0 8px 22px rgba(0,0,0,0.3) !important; }
+.leaflet-control-zoom a {
+  color: #d8e9e8 !important; background: rgba(9,25,32,0.94) !important;
+  border-color: #31515a !important;
+}
+.leaflet-control-zoom a:hover { color: var(--primary) !important; background: #142c36 !important; }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { color: #dbe8e8; background: #10232c; }
+.leaflet-popup-content-wrapper { border: 1px solid #31515a; border-radius: 6px; }
+.leaflet-popup-content h4 { color: #e8f3f2; border-bottom-color: #29454e; }
+.leaflet-popup-content td:first-child { color: #9ab0b6; }
+.leaflet-popup-content td:last-child, .leaflet-popup-content td.total-row:last-child { color: var(--primary); }
+#loading { color: #eaf5f3; background: rgba(8,21,27,0.95); border: 1px solid #31515a; }

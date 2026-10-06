@@ -1,12 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
-  <defs>
-    <linearGradient id="pinGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#4a90e2"/>
-      <stop offset="100%" stop-color="#0d6efd"/>
-    </linearGradient>
-  </defs>
-  <path d="M60 8 C38 8 20 26 20 48 C20 72 60 112 60 112 C60 112 100 72 100 48 C100 26 82 8 60 8 Z"
-        fill="url(#pinGrad)"/>
-  <circle cx="60" cy="48" r="26" fill="#ffffff"/>
-  <path d="M52 32 h16 v12 h12 v16 h-12 v12 h-16 v-12 h-12 v-16 h12 z" fill="#e74c3c"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">WebGIS Semarang</title>
+  <rect x="5" y="5" width="110" height="110" rx="24" fill="#0b1b22" stroke="#294b54" stroke-width="3"/>
+  <path d="M29 25 47 18l17 8 19-8 15 13-5 17 9 14-17 15 3 17-21 7-16-13-17 7-13-17 7-16-8-15z" fill="#12313a" stroke="#4bd7cb" stroke-width="3" stroke-linejoin="round"/>
+  <path d="m29 51 21-5 14 9 19-7 19 8M47 18l3 28-10 18 7 27M64 26l0 29 16 14-3 24M84 18l-1 30 19 17" fill="none" stroke="#70aeb0" stroke-opacity=".58" stroke-width="2" stroke-linecap="round"/>
+  <path d="M54 43h12v9h9v12h-9v9H54v-9h-9V52h9z" fill="#ff8174" stroke="#0b1b22" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="28" cy="51" r="3" fill="#f2c16d"/>
+  <circle cx="101" cy="56" r="3" fill="#f2c16d"/>
 </svg>
